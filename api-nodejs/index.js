@@ -1,134 +1,47 @@
-
-require("dotenv").config();
-
-const express = require("express");
-const cors = require("cors");
-
+const express = require('express');
+const cors = require('cors');
+const productRoutes = require('./routes/product.route');
+const PORT = process.env.PORT || 3001;
+const NODE_ENV = process.env.NODE_ENV || 'development';
 const app = express();
 
-app.use(cors({
-  origin: "http://localhost:3000",
-}));
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+  })
+);
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+// Routes
+app.use('/api/products', productRoutes);
 
-
-const PORT = process.env.PORT || 3000;
-const NODE_ENV = process.env.NODE_ENV;
-const JWT_SECRET = process.env.JWT_SECRET;
-
-
-let products = [
-  {
-    id: 1,
-    name: "HP Laptop",
-    price: 50,
-    status: "active",
-  },
-  {
-    id: 2,
-    name: "Keyboard",
-    price: 120,
-    status: "inactive",
-  },
-];
-
-//health check 
-app.get("/health", (req, res) => {
+// Health check
+app.get('/health', (req, res) => {
   res.status(200).json({
     success: true,
-    environment: NODE_ENV,
-    message: "Server is healthy",
+    environment: process.env.NODE_ENV,
+    message: "Server is healthy"
   });
 });
 
-//get all products
-app.get("/api/products", (req, res) => {
-  res.status(200).json({
-    success: true,
-    data: products,
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found"
   });
 });
 
-//get product by id
-app.get("/api/products/:id", (req, res) => {
-  const id = Number(req.params.id);
-
-  const product = products.find((p) => p.id === id);
-
-  if (!product) {
-    return res.status(404).json({
-      success: false,
-      message: "Product not found",
-    });
-  }
-
-  res.status(200).json({
-    success: true,
-    data: product,
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: "Something went wrong!"
   });
 });
 
-//post new product
-app.post("/api/products", (req, res) => {
-  const { name, price, status } = req.body;
-
-  if (!name || !price) {
-    return res.status(400).json({
-      success: false,
-      message: "name and price are required",
-    });
-  }
-
-  const newProduct = {
-    id: products.length + 1,
-    name,
-    price,
-    status: status || "active",
-  };
-
-  products.push(newProduct);
-
-  res.status(201).json({
-    success: true,
-    message: "Product created successfully",
-    data: newProduct,
-  });
-});
-
-//update product status
-app.put("/api/products/:id/status", (req, res) => {
-  const id = Number(req.params.id);
-
-  const product = products.find((p) => p.id === id);
-
-  if (!product) {
-    return res.status(404).json({
-      success: false,
-      message: "Product not found",
-    });
-  }
-
-  const { status } = req.body;
-
-  if (!status) {
-    return res.status(400).json({
-      success: false,
-      message: "status is required",
-    });
-  }
-
-  product.status = status;
-
-  res.status(200).json({
-    success: true,
-    message: "Product status updated",
-    data: product,
-  });
-});
-
-//start the server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${NODE_ENV}`);
-});
+app.listen(process.env.PORT || 3001, () => {
+  console.log(`Server running on port ${process.env.PORT || 3001}`);
+})
