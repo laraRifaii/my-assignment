@@ -1,11 +1,14 @@
-import { Products } from "../../types/Product";
-export default function ProductCard({ product }: { product: Products }) {
+import { Product } from "@/schemas/productSchema";
+
+export default function ProductCard({ product }: { product: Product }) {
   return (
-    <div className="border rounded p-4 shadow">
-        <h2 className="text-xl font-bold mb-2">{product.name}</h2>
-        <p className="text-gray-600 mb-2">Price: ${product.price}</p>
-        <p className={`mb-2 ${product.status === 'active' ? 'text-green-500' : 'text-red-500'}`}>
-            Status: {product.status}</p>
+    <div className="bg-white rounded-lg shadow-md p-4 border border-gray-200 hover:shadow-lg transition-shadow">
+      <h1 className="text-lg font-semibold text-gray-800 mb-2">
+        {product.name}
+      </h1>
+      <p className="text-xl font-bold text-blue-600">
+        ${product.price}
+      </p>
     </div>
-    );
+  );
 }
