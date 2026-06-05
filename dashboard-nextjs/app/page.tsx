@@ -8,6 +8,7 @@ import EmptyState from "@/components/states/Empty";
 import { Product } from "@/schemas/productSchema";
 import SearchBar from "@/components/products/SearchBar";
 
+
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -23,14 +24,19 @@ export default function Home() {
         setProducts(products.data);
         console.log(products);
       } catch (err: unknown) {
-        if (err) {
-          if (err.status === 401) {
-            setError("Authentication required. Please log in again.");
-          } else if (err.status === 403) {
-            setError(
-              "Access denied. You don't have permission to view these products.",
-            );
-          }
+        const errWithStatus = err as { status?: number };
+        const errWithMessage = err as { message?: string };
+
+        if (errWithStatus.status === 401) {
+          setError("Authentication required. Please log in again.");
+        } else if (errWithStatus.status === 403) {
+          setError(
+            "Access denied. You don't have permission to view these products.",
+          );
+        } else if (errWithMessage.message) {
+          setError(errWithMessage.message);
+        } else {
+          setError("An unexpected error occurred.");
         }
       } finally {
         setLoading(false);
@@ -69,7 +75,7 @@ export default function Home() {
       {filteredProducts.length === 0 ? (
         <EmptyState message="No products found" />
       ) : (
-        <div className="grid gap-4">
+        <div className="flex gap-5 justify-between flex-wrap">
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

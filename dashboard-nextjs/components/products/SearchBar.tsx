@@ -1,3 +1,5 @@
+import { IoMdSearch } from "react-icons/io";
+
 type SearchBarProps = {
   value: string;
   onChange: (value: string) => void;
@@ -17,8 +19,8 @@ export default function SearchBar({
         className="border p-3 rounded-lg w-full"
       />
 
-      <button className="bg-black text-white px-4 py-3 rounded-lg">
-        Search
+      <button className="bg-black text-white px-4 py-4 rounded-lg">
+        <IoMdSearch size={20} />
       </button>
     </div>
   );

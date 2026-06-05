@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const productStatus = z.enum(["active", "inactive"]);
+export const productStatus = z.enum(["In Stock", "Out of Stock"]);
 
 export const createProductSchema = z.object({
   id: z.number(),
@@ -12,7 +12,7 @@ export const createProductSchema = z.object({
     .number()
     .positive("Price must be positive")
     .min(0.01, "Price must be greater than 0"),
-  status: productStatus.optional().default("active"),
+  status: productStatus.optional().default("In Stock"),
 });
 
 export const productIdParamSchema = z.object({

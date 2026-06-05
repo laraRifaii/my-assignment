@@ -4,7 +4,8 @@ export const ProductSchema = z.object({
   id: z.number(),
   name: z.string(),
   price: z.number(),
-  status: z.string(),
+  description: z.string(),
+  status: z.enum(["In Stock", "Out of Stock"]).default("In Stock"),
 });
 
 export const ProductsResponseSchema = z.object({
