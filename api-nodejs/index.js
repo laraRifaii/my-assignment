@@ -1,10 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const productRoutes = require('./routes/product.route');
+const authRoutes = require("./routes/auth.routes");
 const PORT = process.env.PORT || 3001;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const app = express();
-const authRoutes = require("./routes/auth.routes");
 require("dotenv").config();
 
 app.use(

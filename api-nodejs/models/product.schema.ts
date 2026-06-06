@@ -25,7 +25,14 @@ export const updateProductStatusSchema = z.object({
   status: productStatus,
 });
 
+export const login = z.array(z.object({
+  id: z.number(),
+  email: z.email().min(1, "Email is required"),
+  password: z.string().min(6, "Password must be at least 6 characters long")
+}));
+
 export type CreateProductInput = z.infer<typeof createProductSchema>;
 export type ProductIdParam = z.infer<typeof productIdParamSchema>;
 export type UpdateProductStatus = z.infer<typeof updateProductStatusSchema>;
 export type ProductStatus = z.infer<typeof productStatus>;
+export type User = z.infer<typeof login>;

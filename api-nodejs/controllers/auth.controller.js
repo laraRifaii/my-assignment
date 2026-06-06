@@ -1,47 +1,25 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
-const users = require("../data/user");
+const authService = require("../services/auth.service");
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const user = users.find(
-    (u) => u.email === email
-  );
+    const token = await authService.loginUser(
+      email,
+      password
+    );
 
-  if (!user) {
-    return res.status(401).json({
+    return res.json({
+      success: true,
+      token,
+    });
+  } catch (error) {
+    return res.status(error.status || 500).json({
       success: false,
-      message: "Invalid credentials",
+      message:
+        error.message || "Internal Server Error",
     });
   }
-
-  const isMatch = await bcrypt.compare(
-    password,
-    user.password
-  );
-
-  if (!isMatch) {
-    return res.status(401).json({
-      success: false,
-      message: "Invalid credentials",
-    });
-  }
-  const token = jwt.sign(
-    {
-      userId: user.id,
-      email: user.email,
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "1h",
-    }
-  );
-
-  res.json({
-    success: true,
-    token,
-  });
 };
 
 module.exports = {
