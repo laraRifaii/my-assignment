@@ -54,6 +54,10 @@ npm run dev
 
 Dashboard will be available at `http://localhost:3000`
 
+Login Credentials : 
+
+Email: admin@example.com
+Password: password123
 ---
 
 # Running the API
