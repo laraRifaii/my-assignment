@@ -37,7 +37,7 @@ class ProductService {
   }
 
   findById(id) {
-    const product = products.find((p) => p.id === id);
+    products.find((p) => p.id === Number(id));
     if (!product) {
       throw new Error("Product not found");
     }
@@ -45,10 +45,11 @@ class ProductService {
   }
 
   create(productData) {
-    const { id, status, ...productWithoutIdAndStatus } = productData;
+    const { id, status, ...rest } = productData;
+
     const newProduct = {
-      id: products.length + 1,
-      ...productWithoutIdAndStatus,
+      id: products.length ? Math.max(...products.map((p) => p.id)) + 1 : 1,
+      ...rest,
       status: status || "In Stock",
     };
 
@@ -60,6 +61,30 @@ class ProductService {
     const product = this.findById(id);
     product.status = status;
     return product;
+  }
+  
+  updateProduct(id, productData) {
+    const product = this.findById(Number(id));
+
+    const { id: _, ...safeData } = productData;
+
+    Object.assign(product, safeData);
+
+    return product;
+  }
+
+  deleteById(id) {
+    const index = products.findIndex((p) => p.id === Number(id));
+
+    if (index === -1) {
+      throw new Error("Product not found");
+    }
+
+    const deletedProduct = products[index];
+
+    products.splice(index, 1);
+
+    return deletedProduct;
   }
 }
 
