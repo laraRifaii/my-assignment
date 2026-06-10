@@ -37,7 +37,7 @@ class ProductService {
   }
 
   findById(id) {
-    products.find((p) => p.id === Number(id));
+   const product = products.find((p) => p.id === Number(id));
     if (!product) {
       throw new Error("Product not found");
     }
@@ -62,7 +62,7 @@ class ProductService {
     product.status = status;
     return product;
   }
-  
+
   updateProduct(id, productData) {
     const product = this.findById(Number(id));
 
