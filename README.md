@@ -39,7 +39,7 @@ CORS_ORIGIN=http://localhost:3000
 Create a `.env.local` file in the Next.js dashboard:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:3001
+NEXT_PUBLIC_API_URL=http://localhost:3001/api/
 ```
 
 ---
@@ -54,7 +54,12 @@ npm run dev
 
 Dashboard will be available at `http://localhost:3000`
 
+# Login Credentials  
+```bash
+Email: admin@example.com
+Password: password123
 ---
+```
 
 # Running the API
 
