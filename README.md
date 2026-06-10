@@ -27,7 +27,7 @@ npm install -g pm2
 
 # Environment Variables
 
-Create a `.env` file in the API project root:
+Create a `.env` file in the api-nodejs root folder:
 
 ```env
 PORT=3001
